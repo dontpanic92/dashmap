@@ -1,6 +1,11 @@
 use crate::mapref;
 use core::hash::{BuildHasher, Hash};
 use core::ops::Deref;
+
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
 pub struct Ref<'a, K, S = RandomState> {
     inner: mapref::one::Ref<'a, K, (), S>,

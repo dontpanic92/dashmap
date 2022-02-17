@@ -3,7 +3,16 @@ use core::hash::BuildHasher;
 use core::hash::Hash;
 use core::ops::{Deref, DerefMut};
 use parking_lot::{RwLockReadGuard, RwLockWriteGuard};
+
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
+
+
+#[cfg(feature = "no_std")]
+use alloc::sync::Arc;
+#[cfg(not(feature = "no_std"))]
 use std::sync::Arc;
 
 pub struct RefMulti<'a, K, V, S = RandomState> {

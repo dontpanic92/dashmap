@@ -2,6 +2,11 @@ use crate::HashMap;
 use core::hash::{BuildHasher, Hash};
 use core::ops::{Deref, DerefMut};
 use parking_lot::{RwLockReadGuard, RwLockWriteGuard};
+
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
 
 pub struct Ref<'a, K, V, S = RandomState> {

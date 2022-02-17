@@ -6,8 +6,20 @@ use crate::{DashMap, HashMap};
 use core::hash::{BuildHasher, Hash};
 use core::mem;
 use parking_lot::{RwLockReadGuard, RwLockWriteGuard};
+
+#[cfg(feature = "no_std")]
+use hashbrown::hash_map;
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map;
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
+
+#[cfg(feature = "no_std")]
+use alloc::sync::Arc;
+#[cfg(not(feature = "no_std"))]
 use std::sync::Arc;
 
 /// Iterator over a DashMap yielding key value pairs.

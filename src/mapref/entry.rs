@@ -6,6 +6,10 @@ use core::hash::{BuildHasher, Hash};
 use core::mem;
 use core::ptr;
 use parking_lot::RwLockWriteGuard;
+
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
 
 pub enum Entry<'a, K, V, S = RandomState> {

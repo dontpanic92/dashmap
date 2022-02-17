@@ -3,6 +3,11 @@ use crate::{DashMap, HashMap};
 use core::borrow::Borrow;
 use core::fmt;
 use core::hash::{BuildHasher, Hash};
+
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
 
 /// A read-only view into a `DashMap`. Allows to obtain raw references to the stored values.

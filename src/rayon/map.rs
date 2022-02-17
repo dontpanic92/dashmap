@@ -5,7 +5,15 @@ use core::hash::{BuildHasher, Hash};
 use parking_lot::RwLock;
 use rayon::iter::plumbing::UnindexedConsumer;
 use rayon::iter::{FromParallelIterator, IntoParallelIterator, ParallelExtend, ParallelIterator};
+
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
+
+#[cfg(feature = "no_std")]
+use alloc::sync::Arc;
+#[cfg(not(feature = "no_std"))]
 use std::sync::Arc;
 
 impl<K, V, S> ParallelExtend<(K, V)> for DashMap<K, V, S>

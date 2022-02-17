@@ -10,6 +10,11 @@ use core::hash::{BuildHasher, Hash};
 use core::iter::FromIterator;
 #[cfg(feature = "raw-api")]
 use parking_lot::RwLock;
+
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
 
 /// DashSet is a thin wrapper around [`DashMap`] using `()` as the value type. It uses

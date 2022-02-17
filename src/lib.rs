@@ -1,5 +1,10 @@
 #![allow(clippy::type_complexity)]
 
+#![cfg_attr(feature = "no_std", no_std)]
+
+#[cfg(feature = "no_std")]
+extern crate alloc;
+
 pub mod iter;
 pub mod iter_set;
 pub mod mapref;
@@ -18,12 +23,16 @@ pub mod rayon {
     pub mod set;
 }
 
+use alloc::boxed::Box;
+use alloc::vec::Vec;
 use cfg_if::cfg_if;
 use core::borrow::Borrow;
 use core::fmt;
 use core::hash::{BuildHasher, Hash, Hasher};
 use core::iter::FromIterator;
+
 use core::ops::{BitAnd, BitOr, Shl, Shr, Sub};
+
 use iter::{Iter, IterMut, OwningIter};
 use mapref::entry::{Entry, OccupiedEntry, VacantEntry};
 use mapref::multiple::RefMulti;
@@ -31,6 +40,11 @@ use mapref::one::{Ref, RefMut};
 use parking_lot::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 pub use read_only::ReadOnlyView;
 pub use set::DashSet;
+
+#[cfg(feature = "no_std")]
+use ahash::RandomState;
+
+#[cfg(not(feature = "no_std"))]
 use std::collections::hash_map::RandomState;
 pub use t::Map;
 use try_result::TryResult;
@@ -43,7 +57,11 @@ cfg_if! {
     }
 }
 
+#[cfg(not(feature = "no_std"))]
 pub(crate) type HashMap<K, V, S> = std::collections::HashMap<K, SharedValue<V>, S>;
+
+#[cfg(feature = "no_std")]
+pub(crate) type HashMap<K, V, S> = hashbrown::HashMap<K, SharedValue<V>, S>;
 
 fn shard_amount() -> usize {
     (num_cpus::get() * 4).next_power_of_two()

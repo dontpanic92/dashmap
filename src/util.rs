@@ -91,12 +91,14 @@ impl<T> SharedValue<T> {
     }
 }
 
+
 struct AbortOnPanic;
 
 impl Drop for AbortOnPanic {
     fn drop(&mut self) {
-        if std::thread::panicking() {
+        /*if std::thread::panicking() {
             std::process::abort()
-        }
+        }*/
+        core::panic!();
     }
 }
