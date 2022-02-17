@@ -13,7 +13,7 @@ keywords = ["atomic", "concurrent", "hashmap"]
 categories = ["concurrency", "algorithms", "data-structures"]
 
 [features]
-default = ["send_guard", "no_std"]
+default = ["send_guard"]
 raw-api = []
 send_guard = ["parking_lot/send_guard"]
 no_std = []
